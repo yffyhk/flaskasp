@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <link href="{{  url_for('static',filename='css/sign.css')   }}" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb %}
+    <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+    <span class="breadcrumb-item active">Register</span>
+{% endblock %}
+
+{% block content %}
+    <div class="form-signin text-center">
+        <form method="POST">
+            <img class="mb-4" src="{{  url_for('static',filename='img/bootstrap-logo.svg')   }}" alt="" width="72" height="57">
+            <h1 class="h3 mb-3 fw-normal">Please register</h1>
+        
+            <div class="form-floating">
+                <input type="text" name="username" id="username" class="form-control" id="floatingInput" placeholder="Username" required>
+                <label for="floatingInput"></label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" id="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="repassword" id="repassword" class="form-control" id="floatingPassword" placeholder="Repeat Password" required>
+                <label for="floatingPassword"></label>
+            </div>
+
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+        </form>
+    </div>
+{% endblock %}

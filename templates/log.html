@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+    <span class="breadcrumb-item active">Log</span>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column align-items-center mt-2">
+    <div class="mb-3" style="width: 1000px; height:600px;">
+        <canvas id="myChart"></canvas>
+    </div>
+    <select class="custom-select w-25" id="taglist">
+        {% for t in tags %}
+            <option 
+            {% if t['tag'] == title %}     selected    {% endif %}
+            value="{{t['tag']}}">{{t['tag']}}</option>
+        {% endfor %}
+    </select>
+</div>
+
+
+{% endblock %}
+
+{% block extend_script %}
+
+<script src="{{ url_for('static',filename='js/chart.js') }}"></script>
+<script>
+    var taglist = document.getElementById('taglist');
+
+    taglist.onchange = function(){
+        window.location.href = "./".concat(taglist.value); 
+    };
+
+    const labels = getDay();
+
+    const data = {
+        labels: labels,
+        datasets: [{
+          label: `Total of ${taglist.value} in 7 Days`,
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: {{ datas }},
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    };
+
+    var myChart = new Chart(document.getElementById('myChart'),config);
+
+    function getDay() {
+        days = [];
+        for (var i=0; i<7; i++) {
+            var d = new Date();
+            d.setDate(d.getDate() - 6 + i);
+    
+            let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+            let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);   
+            days.push(`${da}-${mo}`);
+        } 
+        return days;
+    }
+</script>
+
+{% endblock %}

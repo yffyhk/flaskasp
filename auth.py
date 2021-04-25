@@ -1,4 +1,4 @@
-import functools
+from functools import wraps
 import time
 
 from flask import (
@@ -6,7 +6,8 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from flaskr.db import get_db
+from flaskasp.db import get_db
+from flaskasp.log import create_log
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -37,6 +38,8 @@ def register():
                 (username, generate_password_hash(password))
             )
             db.commit()
+
+            create_log("register")
             return redirect(url_for('auth.login'))
 
         flash(error)
@@ -49,7 +52,6 @@ def login():
         username = request.form['username']
         password = request.form['password']
         remember = request.form.getlist('remember')
-        print(remember)
 
         db = get_db()
         error = None
@@ -66,6 +68,7 @@ def login():
             session.clear()
             session['user_id'] = user['id']
 
+            create_log("login")
             resp = make_response(redirect(url_for('index')))
             if not remember:
                 resp.set_cookie(key='username', value='', expires=0)
@@ -75,6 +78,7 @@ def login():
                 resp.set_cookie(key='username', value=username, expires=time.time()+7*60*60*24)
                 resp.set_cookie(key='password', value=password, expires=time.time()+7*60*60*24)
                 return resp
+            
             return redirect(url_for('index'))
 
         flash(error)
@@ -90,6 +94,7 @@ def login():
 
 @bp.route('/logout')
 def logout():
+    create_log("logout")
     session.clear()
     return redirect(url_for('index'))
 
@@ -103,3 +108,22 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login', next=request.url))
+        elif g.user['isadmin'] == 0:
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+       
+    return decorated_function

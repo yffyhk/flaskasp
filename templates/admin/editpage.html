@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+    <span class="breadcrumb-item active">Edit book</span>
+{% endblock %}
+
+{% block content %}
+    <div class="list-group mt-5 mx-auto w-50">
+        {% for book in books %}
+            <a href="{{ url_for('admin.edit_article',title=book['title'],id=book['id']) }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    {% if (book['topic']|length) > 21 %}
+                        <h5 class="mb-1"> {{ book['topic'][0:20] }} ...</h5>
+                    {% else %}
+                        <h5 class="mb-1"> {{ book['topic'] }}</h5>
+                    {% endif %}
+                    <small>{{ book['created'] }}</small>
+                </div>
+                {% if (book['body']|length) > 51 %}
+                    <p class="mb-1"> {{ book['body'][0:50] }} ...</p>
+                {% else %}
+                    <p class="mb-1"> {{ book['body'] }} </p>
+                {% endif %}
+                <div class="d-flex w-100 justify-content-between">
+                    <small>By {{ book['username'] }}</small> 
+                    <small>Domin: /{{ book['title'] }}</small>
+                </div>    
+            </a>
+        {% endfor %}
+
+        <div class="d-flex w-100 justify-content-between">
+            <form class="input-group mt-3" method="POST">
+                <input type="text" class="form-control" name="domain" id="domain" pattern="[a-zA-Z0-9]*" placeholder="New Domain Name" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                <div class="input-group-append">
+                  <button type="submit" value="Submit" class="btn btn-outline-secondary"> + </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+    <span class="breadcrumb-item active">Video</span>
+{% endblock %}
+
+{% block content %}
+
+{% if g.user and g.user['isadmin'] == 1 %}
+    <div class="mt-2 mb-2 text-center">
+        <a type="button" href="{{ url_for('video.upload') }}" class="btn btn-outline-primary">Upload</a>
+    </div> 
+{% endif %}
+
+<div class="d-flex justify-content-between mt-3 mb-3 mx-5">
+    <a type="button" class="btn btn-outline-dark"
+    {% if back == true %}
+        href="{{ url_for('video.index',page=now-1) }}" 
+    {% endif %}
+    >Back</a>
+
+    <a type="button" class="btn btn-outline-dark"
+    {% if next == true %}
+        href="{{ url_for('video.index',page=now+1) }}" 
+    {% endif %}
+    >Next</a>
+</div>
+
+{% for v in videos %}
+    {% if loop.cycle('odd', 'even') == 'odd' %}
+        <div class="row g-0 overflow-hidden p-5 flex-md-row shadow-sm h-md-250 " style="background-color:rgb(235, 235, 235);">
+    {% else %}
+        <div class="row g-0 overflow-hidden p-5 flex-md-row shadow-sm h-md-250">
+    {% endif %}
+
+    {% if g.user and g.user['isadmin'] == 1 %}
+        <div class="mr-2">
+            <a type="button" href="{{ url_for('video.edit',id=v['id']) }}" class="btn btn-outline-secondary">Edit</a>
+        </div> 
+    {% endif %}
+
+    <div class="col mx-2 p-4 d-flex flex-column position-static">
+      <h3 class="mb-0">{{v['topic']}}</h3>
+      <p class="card-text ">{{v['body']}}</p>
+    </div>
+
+    <div class="col mx-2">
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="{{v['link']}}" allowfullscreen></iframe>
+        </div>   
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {% if articles[0]['title'] != "home" %}
+      <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+      <span class="breadcrumb-item active">{{ articles[0]['title'] }}</span>
+    {% else %}
+      <span class="breadcrumb-item active">Home</span>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="p-4 p-md-5 text-white bg-primary text-center ">
+        <h1 class="display-2 mt-5"><strong>{{ articles[0]['topic'] }}</strong></h1>
+        <h3 class="my-3">{{ articles[0]['body'] }}</h3>
+        
+        {% if articles[0]['button'] %}
+          <a type="button" class="btn btn-outline-light mb-5" href="/article/{{articles[0]['link']}}">{{articles[0]['button']}}</a>
+        {% endif %}
+    </div>
+
+    {% for a in articles %}
+      {% if a['turn'] != 0 %}
+        {% if loop.cycle('odd', 'even') == 'odd' %}
+          <div class="row g-0 overflow-hidden p-5 shadow-sm h-md-250 flex-row-reverse" style="background-color:rgb(235, 235, 235);">
+        {% else %}
+          <div class="row g-0 overflow-hidden p-5 flex-md-row shadow-sm h-md-250">
+        {% endif %}
+
+          <div class="col mx-2 p-4 d-flex flex-column position-static">
+            <h3 class="mb-0">{{a['topic']}}</h3>
+            <p class="card-text ">{{a['body']}}</p>
+
+            {% if a['button'] %}
+              <a type="button" class="btn btn-outline-info mt-2 w-25" href="/article/{{a['link']}}">{{a['button']}}</a>
+            {% endif %}
+
+          </div>
+          <div class="col mx-2">
+            {% if a['image'] %}
+              <img class="mx-auto d-block" src="{{  url_for('static',filename='icon/'+a['image'])   }}" width="200px" height="200px"/>
+            {% endif %}     
+          </div>
+        </div>
+
+      {% endif %}
+    {% endfor %}
+{% endblock %}

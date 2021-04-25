@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}  
-    <div class="form-signin text-center">
+    <div class="form-signin text-center pt-5">
         <form method="POST">
             <img class="mb-4" src="{{  url_for('static',filename='img/bootstrap-logo.svg')   }}" alt="" width="72" height="57">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -20,7 +20,7 @@
                 {% if username %}
                     value = "{{ username }}"
                 {% endif %}
-                type="text" name="username" id="username" class="form-control" id="floatingInput" placeholder="Username" required>
+                type="text" name="username" id="username" class="form-control" placeholder="Username" required>
                 <label for="floatingInput"></label>
             </div>
             <div class="form-floating">
@@ -28,7 +28,7 @@
                 {% if password %}
                     value = "{{ password }}"
                 {% endif %}
-                type="password" name="password" id="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                type="password" name="password" id="password" class="form-control" placeholder="Password" required>
                 <label for="floatingPassword"></label>
             </div>
         

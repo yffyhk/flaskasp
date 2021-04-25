@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    <a class="breadcrumb-item" href="{{ url_for('index') }}">Home</a>
+    <span class="breadcrumb-item active">Profile</span>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mx-5 ">
+    <div class="row mt-3 mb-4">
+        <h3 class="form-label">{{user['username']}}</h3>
+        {% if g.user['id'] != user['id'] %}
+            {% if isfollow == true %}
+                <a type="button" href="{{url_for('profile.unfollow',id=user['id'])}}" class="btn btn-outline-success ml-5">Unfollow</a>
+            {% else %}
+                <a type="button" href="{{url_for('profile.follow',id=user['id'])}}" class="btn btn-outline-success ml-5">Follow</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="row mb-5">
+        <div class="col">
+            <label class="form-label">My Post</label>
+            <ul class="list-group">
+                {% for mp in my_posts %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {% if mp['topic']|length > 31 %}
+                            <a href="{{ url_for('forum.post',id=mp['id']) }}">{{mp['topic'][0:30]}}...</a>
+                        {% else %}
+                            <a href="{{ url_for('forum.post',id=mp['id']) }}">{{mp['topic']}}</a>
+                        {% endif %}
+                        <small>{{ mp['created'] }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col">
+            <label class="form-label">My Reply</label>
+            <ul class="list-group">
+                {% for mr in my_replys %} 
+                    <li class="list-group-item d-flex justify-content-between">
+                        {% if mr['body']|length > 31 %}
+                            <a href="{{ url_for('forum.post',id=mr['post_id']) }}">{{mr['body'][0:30]}}...</a>
+                        {% else %}
+                            <a href="{{ url_for('forum.post',id=mr['post_id']) }}">{{mr['body']}}</a>
+                        {% endif %}
+                        <small>{{ mr['created'] }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label class="form-label">My Follwer Post</label>
+            <ul class="list-group">
+                {% for fp in follower_posts %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {% if fp['topic']|length > 31 %}
+                            <a href="{{ url_for('forum.post',id=fp['id']) }}">{{fp['topic'][0:30]}}...</a>
+                        {% else %}
+                            <a href="{{ url_for('forum.post',id=fp['id']) }}">{{fp['topic']}}</a>
+                        {% endif %}
+                        <small>{{ fp['created'] }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col">
+            <label class="form-label">My Follwer Reply</label>
+            <ul class="list-group">
+                {% for fr in follower_replys %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {% if fr['body']|length > 31 %}
+                            <a href="{{ url_for('forum.post',id=fr['post_id']) }}">{{fr['body'][0:30]}}...</a>
+                        {% else %}
+                            <a href="{{ url_for('forum.post',id=fr['post_id']) }}">{{fr['body']}}</a>
+                        {% endif %}
+                        <small>{{ fr['created'] }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

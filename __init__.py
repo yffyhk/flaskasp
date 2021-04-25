@@ -1,6 +1,7 @@
 import os
+import json
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, url_for
 
 
 def create_app(test_config=None):
@@ -23,12 +24,31 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return redirect(url_for('article.page',title="home"))
 
     from . import db
     db.init_app(app)
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import admin
+    app.register_blueprint(admin.bp)
+
+    from . import article
+    app.register_blueprint(article.bp)
+
+    from . import log
+    app.register_blueprint(log.bp)
+
+    from . import forum
+    app.register_blueprint(forum.bp)
+
+    from . import video
+    app.register_blueprint(video.bp)
+
+    from . import profile
+    app.register_blueprint(profile.bp)
+
 
     return app

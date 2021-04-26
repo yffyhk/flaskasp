@@ -37,8 +37,8 @@ def post(id):
 
     return render_template('forum/post.html',post=post,replys=replys)
 
-@login_required
 @bp.route('/newpost', methods=('GET','POST'))
+@login_required
 def new_post():
 
     if request.method == 'POST':
@@ -64,8 +64,8 @@ def new_post():
 
     return render_template('forum/form.html',isPost=True)
 
-@login_required
 @bp.route('/editpost/<id>', methods=('GET','POST'))
+@login_required
 def edit_post(id):
 
     db = get_db()
@@ -92,8 +92,8 @@ def edit_post(id):
 
     return render_template('forum/form.html',isPost=True,data=data)
 
-@login_required
 @bp.route('/newreply/<id>', methods=('GET','POST'))
+@login_required
 def new_reply(id):
 
     if request.method == 'POST':
@@ -115,8 +115,8 @@ def new_reply(id):
 
     return render_template('forum/form.html',isPost=False)
 
-@login_required
 @bp.route('/editreply/<id>', methods=('GET','POST'))
+@login_required
 def edit_reply(id):
 
     db = get_db()

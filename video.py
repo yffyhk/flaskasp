@@ -30,8 +30,8 @@ def index(page):
 
     return render_template('video/index.html',videos=videos,back=back,next=next,now=page)
 
-@admin_required
 @bp.route('/upload', methods=('GET','POST'))
+@admin_required
 def upload():
 
     if request.method == 'POST':
@@ -54,8 +54,8 @@ def upload():
 
     return render_template('video/form.html')
 
-@admin_required
 @bp.route('/edit/<id>', methods=('GET','POST'))
+@admin_required
 def edit(id):
 
     db = get_db()
@@ -81,8 +81,8 @@ def edit(id):
 
     return render_template('video/form.html',data=data)
 
-@admin_required
 @bp.route('/delete/<id>', methods=('GET',))
+@admin_required
 def delete(id):
 
     db = get_db()

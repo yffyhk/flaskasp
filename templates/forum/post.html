@@ -7,13 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="mx-5 px-5">
+<div class="mx-5">
     {% if g.user %}
-        <div class="mt-3 mb-3 text-right">
+        <div class="mt-3 mb-3 text-right mr-5">
             <a type="button" href="{{ url_for('forum.new_reply',id=post['id']) }}" class="btn btn-outline-primary">Reply</a>
         </div> 
     {% endif %}
-    <div class="card mt-2 mb-2">
+    <div class="card mt-2 mb-2 border border-dark mx-3 px-2">
         <div class="card-body mx-2">
             <div class="row d-flex justify-content-between">
                 <h5 class="card-title">{{post['topic']}}</h5>
@@ -32,7 +32,7 @@
         </div>
     </div>
     {% for r in replys %}
-        <div class="card mb-2">
+        <div class="card mb-2 mx-5 px-2">
             <div class="card-body mx-2">
                 <div class="row justify-content-end">
                     {% if g.user['id'] == r['user_id']  %}

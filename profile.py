@@ -7,8 +7,8 @@ from flask import (
 
 bp = Blueprint('profile', __name__, url_prefix='/profile')
 
-@login_required
 @bp.route('/<id>', methods=('GET',))
+@login_required
 def index(id):
 
     db = get_db()
@@ -38,8 +38,8 @@ def index(id):
 
     return render_template('profile/index.html',isfollow=isfollow,user=user,my_posts=my_posts,my_replys=my_replys,follower_posts=follower_posts,follower_replys=follower_replys)
 
-@login_required
 @bp.route('/follow/<id>', methods=('GET',))
+@login_required
 def follow(id):
 
     if id != g.user['id']:
@@ -49,8 +49,8 @@ def follow(id):
 
     return redirect(url_for('profile.index',id=id))
 
-@login_required
 @bp.route('/unfollow/<id>', methods=('GET',))
+@login_required
 def unfollow(id):
     db = get_db()
     db.execute('DELETE FROM follow WHERE follower_id=? AND followed_id=?',(g.user['id'],id))

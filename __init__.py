@@ -7,7 +7,7 @@ from flask import Flask, render_template, redirect, url_for
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY = '4136489ea93036a02da1d21b910437de5176ff0f8b193fb7',
+        SECRET_KEY = '',
         DATABASE=os.path.join(app.instance_path,'flaskasp.sqlite')
     )
 

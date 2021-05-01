@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, make_response
@@ -15,20 +15,23 @@ def graph(tag):
     
     tags = db.execute('SELECT DISTINCT tag FROM log ORDER BY tag ASC').fetchall()
  
-    sameday = db.execute("SELECT strftime('%d', created) AS day, COUNT(*) AS count"
+    sameday = db.execute("SELECT strftime('%Y-%m-%d', created) AS day, COUNT(*) AS count"
                          " FROM log"
-                         " WHERE tag = ? AND created > (SELECT DATETIME('now', '-7 day'))"
+                         " WHERE tag = ? AND created > (SELECT DATETIME('now', '-6 day'))"
                          " GROUP BY day"
-                         " ORDER BY day ASC",(tag,)
+                         " ORDER BY day DESC",(tag,)               
     ).fetchall()
 
-    today = int(date.today().strftime('%d'))
 
+    today = date.today()
     datas = [0, 0, 0, 0, 0, 0, 0]
-    for d in sameday:
-        dday = int(d['day'])
-        theday = 6 - (today - dday)
-        datas[theday] += int(d['count'])
+
+    for sd in sameday:
+        sd_date = datetime.strptime(sd['day'], '%Y-%m-%d').date()
+        between = (today-sd_date).days
+        index = 6 - between
+        datas[index] = int(sd['count'])
+
 
     return render_template('log.html',datas=datas,title=tag,tags=tags)
 
